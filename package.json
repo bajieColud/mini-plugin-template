@@ -1,0 +1,13 @@
+{
+  "name": "mini-plugin-template",
+  "version": "1.0.0",
+  "scripts": {
+    "dev:wx": "node build/build.js wx"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "ora": "^5.3.0",
+    "rimraf": "^3.0.2",
+    "webpack": "^4.44.1"
+  }
+}
