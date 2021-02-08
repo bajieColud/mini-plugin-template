@@ -27,7 +27,6 @@ function handleAst(node,platform){
   let children = node.children;
   if (children && children.length) {
     children.forEach(element => {
-      console.log('###element is ',element)
         handleAst(element,platform)
     });
   }
@@ -61,7 +60,6 @@ module.exports = function(ast,{platform}) {
   platform = platform || 'wx';
   handleAst(ast,platform);
   let code = generateCode(ast)
-  console.log('###code is ',code,ast)
   let temp = '<template>'
   let first = code.indexOf(temp);
   let last = code.lastIndexOf('</template>');
