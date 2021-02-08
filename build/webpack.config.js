@@ -31,7 +31,7 @@ module.exports = {
     path: path.join(rootPath, './dist'),
   },
   mode:'development',
-  devtool:'source-map',
+  devtool:'inline-source-map',
 
   resolve:{
     extensions: ['.sqb','.js','.json'],
@@ -44,9 +44,10 @@ module.exports = {
     rules:[
       {
         test:/\.sqb$/,
-        use:{
+        use:[
+        {
           loader:path.resolve(__dirname,'../mini-webpack-loader/loader.js')
-        }
+        }]
       },
       {
         test: /\.less$/,
