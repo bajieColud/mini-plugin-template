@@ -1,5 +1,3 @@
-
-
-.wrap{
+.wrap {
   color: 32rpx;
 }
