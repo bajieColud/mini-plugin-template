@@ -8,16 +8,8 @@ module.exports = (content,{mode,filePath}) => {
   const cacheKey = hash(filePath + content + mode)
  let output = cache.get(cacheKey)
   if (output) return JSON.parse(output)
- // output = compiler.parse(content)
- // 使用JSON.stringify进行序列化缓存，避免修改输出对象时影响到缓存
-  cache.set(cacheKey, JSON.stringify(output))
-
-  let scriptContent='let a = {};\n export default a';
-  // if (output.script) {
-  //   scriptContent = output.script.children.text;
-  // }else {
-    
-  //   scriptContent = 'export default {}';
-  // }
-  return scriptContent
+  output = compiler.parse(content) || {};
+ // 不能使用JSON.stringfy存储，里面有指针指向父节点
+  cache.set(cacheKey, output)
+  return output
 }

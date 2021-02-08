@@ -2,7 +2,7 @@
   "name": "mini-plugin-template",
   "version": "1.0.0",
   "scripts": {
-    "dev:wx": "node build/build.js wx"
+    "dev": "node build/build.js wx"
   },
   "dependencies": {
     "@babel/core": "^7.12.13",

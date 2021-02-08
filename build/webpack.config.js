@@ -2,12 +2,14 @@
 let glob = require('glob')
 let relative = require('relative')
 let path = require('path')
+let fileExt = require('./config')
 let ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 
 let optimization = require('./optimization')
+const platform = process.env.PLATFORM
 
-const rootPath = path.resolve(__dirname,'..');
+const distPath = path.resolve(__dirname,`../dist/${platform}`)
 const srcPath = path.resolve(__dirname,'../src');
 
 function getEntry (rootSrc,rel) {
@@ -24,11 +26,11 @@ let pageEntry = getEntry(srcPath,'/miniprogram/**/index.js')
 let pluginEntry = getEntry(srcPath,'/plugins/**/index.js')
 let appEntry = getEntry(srcPath,'/miniprogram/app.js')
 
-let entry = Object.assign({},pageEntry,pluginEntry,appEntry)
+let entry = Object.assign({},pageEntry,appEntry)
 module.exports = {
   entry,
   output:{
-    path: path.join(rootPath, './dist'),
+    path: distPath,
   },
   mode:'development',
   devtool:'inline-source-map',
@@ -46,7 +48,10 @@ module.exports = {
         test:/\.sqb$/,
         use:[
         {
-          loader:path.resolve(__dirname,'../mini-webpack-loader/loader.js')
+          loader:path.resolve(__dirname,'../mini-webpack-loader/loader.js'),
+          options:{
+            fileExt
+          }
         }]
       },
       {

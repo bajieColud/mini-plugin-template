@@ -71,13 +71,12 @@ function parseHTML(html, handler) {
 			}
 
 		} else {
-
 			html = html.replace(new RegExp("([\\s\\S]*?)<\/" + lastTag + "[^>]*>"), function (all, text) {
-				text = text.replace(/<!--([\s\S]*?)-->|<!\[CDATA\[([\s\S]*?)]]>/g, "$1$2");
-				if (handler.chars)
-					handler.chars(text);
+        text = text.replace(/<!--([\s\S]*?)-->|<!\[CDATA\[([\s\S]*?)]]>/g, "$1$2");
+			  if (handler.chars)
+            handler.chars(text);
+        return "";
 			});
-
 
 			parseEndTag("", lastTag);
 		}
@@ -137,6 +136,7 @@ function parse (template, options) {
   parseHTML(template, {
     start: function start (tag, attrs, unary) {
       let element = {
+        type:1,
         tag,
         attrs,
         unary,
@@ -156,7 +156,6 @@ function parse (template, options) {
     },
 
     end: function end () {
-      // remove trailing whitespace
       let element = stack[stack.length - 1]
       if (element) {
         let lastNode = element.children[element.children.length - 1]
@@ -170,7 +169,6 @@ function parse (template, options) {
     },
 
     chars: function chars (text) {
-   
       let children = currentParent.children;
       let el = {
         type: 3,
@@ -184,7 +182,6 @@ function parse (template, options) {
      
     }
   })
-  console.log('####root is ',root)
   return root;
 }
 module.exports = {
