@@ -144,15 +144,17 @@ function parse (template, options) {
       }
       if (isSpecial[tag]) {
         root[tag] = element;
+      }else {
+        currentParent.children.push(element)
       }
     
+      // 没有tag结束符
       if (!unary) {
         currentParent = element
         stack.push(element)
       } else {
         element.unary = true
       }
-      console.log('####start root tag is ',root);
     },
 
     end: function end () {
@@ -169,13 +171,15 @@ function parse (template, options) {
     },
 
     chars: function chars (text) {
-      let children = currentParent.children;
-      let el = {
-        type: 3,
-        text: text,
-        parent: currentParent
+      if (currentParent) {
+        let children = currentParent.children;
+        let el = {
+          type: 3,
+          text: text,
+          parent: currentParent
+        }
+        children.push(el)     
       }
-      children.push(el)     
       
     },
     comment: function comment (text) {

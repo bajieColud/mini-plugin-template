@@ -8,7 +8,6 @@ var attrList = {
     "s:key":"wx:key",
     "s:elif":"wx:elif",
   }
-
 }
 
 function convertAttrs(attrs,platform) {
@@ -27,6 +26,7 @@ function handleAst(node,platform){
   let children = node.children;
   if (children && children.length) {
     children.forEach(element => {
+      console.log('####element is ',element)
         handleAst(element,platform)
     });
   }
@@ -44,12 +44,12 @@ function generateCode(node) {
 let type = node.type;
   if (type === 1) {
     let tag = node.tag
-    if (node.closed) {
-      return `<${tag}${attrs} />`
+    if (node.unary) {
+      return `<${tag} ${attrs} />`
     }
-    return `<${tag}${attrs}>${childrenContent}</${tag}>`
+    return `<${tag} ${attrs}>${childrenContent}</${tag}>`
 
-  }else if (type === 2) {
+  }else if (type === 3) {
     return node.text;
   }
  
@@ -60,8 +60,11 @@ module.exports = function(ast,{platform}) {
   platform = platform || 'wx';
   handleAst(ast,platform);
   let code = generateCode(ast)
-  let temp = '<template>'
-  let first = code.indexOf(temp);
-  let last = code.lastIndexOf('</template>');
-  return code.substring(first+temp.length,last)
+  console.log('##code is ',code);
+  code = code.replace(/\s*<template\s+>([\s\S]*)<\/template\s*>/,function($0,$1){
+    console.log('##s1 is ',$1)
+    return $1;
+  })
+
+  return code;
 }
