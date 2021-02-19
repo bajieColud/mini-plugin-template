@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "pages/home/index"
+  ],
+
+  "wx":{
+    "plugins": {
+      "emenu-plugin": {
+        "version": "dev",
+        "provider": "wxd2f16468474f61b8"
+      }
+    },
+    "sitemapLocation": "sitemap.json"
+  }
+}

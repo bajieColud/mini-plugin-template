@@ -1,0 +1,13 @@
+<template>
+  <view>123</view>
+</template>
+<script>
+  import {
+    sqbPage
+  } from '@/../mini-core/index'
+
+  sqbPage({
+
+  })
+
+</script>

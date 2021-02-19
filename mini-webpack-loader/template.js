@@ -26,7 +26,6 @@ function handleAst(node,platform){
   let children = node.children;
   if (children && children.length) {
     children.forEach(element => {
-      console.log('####element is ',element)
         handleAst(element,platform)
     });
   }
@@ -60,9 +59,7 @@ module.exports = function(ast,{platform}) {
   platform = platform || 'wx';
   handleAst(ast,platform);
   let code = generateCode(ast)
-  console.log('##code is ',code);
   code = code.replace(/\s*<template\s+>([\s\S]*)<\/template\s*>/,function($0,$1){
-    console.log('##s1 is ',$1)
     return $1;
   })
 

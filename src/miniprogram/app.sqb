@@ -1,0 +1,11 @@
+
+
+<script>
+  import {
+    sqbApp
+  } from '@/../mini-core/index'
+
+  sqbApp({
+    
+  })
+</script>

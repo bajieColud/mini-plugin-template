@@ -1,0 +1,10 @@
+{
+  "pages": ["pages/home/index"],
+  "sitemapLocation": "sitemap.json",
+  "plugins": {
+    "emenu-plugin": {
+      "version": "dev",
+      "provider": "wxd2f16468474f61b8"
+    }
+  }
+}

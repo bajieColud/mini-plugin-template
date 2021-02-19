@@ -1,5 +1,5 @@
 
-process.env.PLATFORM = process.argv[process.argv.length - 1] || 'wx'
+process.env.PLATFORM = 'wx'
 
 var ora = require('ora')
 var rm = require('rimraf')

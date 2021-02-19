@@ -1,0 +1,20 @@
+{
+  "usingComponents": {
+    "page-home": "plugin://emenu-plugin/page-home"
+  },
+
+  "wx": {
+    "navigationStyle": "custom",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#EEE"
+  },
+
+  "my": {
+    "transparentTitle": "auto",
+    "titlePenetrate": "YES",
+    "enableScrollBar": "NO",
+    "pullRefresh": false,
+    "allowsBounceVertical": "NO"
+  }
+}

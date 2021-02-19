@@ -1,22 +1,17 @@
 
 
 <template>
-  
+  <view>12345678</view>
 </template>
 
 
 <script>
-export default {
-  props:{
-    name:String
-  }
-
+import { 
+  sqbComponent
+} from '@/../mini-core/index'
+sqbComponent({
   data:{
-    message:'欢迎来到王者荣耀',
-    list:[
-      '敌人还有5分钟到达战场',
-      '全军出击'
-    ]
+
   }
-}
+})
 </script>

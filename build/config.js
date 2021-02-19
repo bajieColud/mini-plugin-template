@@ -4,12 +4,16 @@ var fileExtList = {
   'wx':{
     'template':'.wxml',
     'wxs':'.wxs',
-    'css':'.acss'
+    'css':'.acss',
+    'platform':'wx',
+    'json':'.json'
   },
   "my":{
     'template':'.axml',
     'wxs':'.sjs',
-    'css':'.wxss'
+    'css':'.wxss',
+    'platform':'my',
+    'json':'.json'
   }
 }
 

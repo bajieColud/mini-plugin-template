@@ -16,17 +16,17 @@ function getEntry (rootSrc,rel) {
   var map = {};
   glob.sync(rootSrc + rel)
   .forEach(file => {
-    var key = relative(rootSrc, file).replace('.js', '');
+    var key = relative(rootSrc, file).replace('.sqb', '');
     map[key] = file;
   })
    return map;
 }
 
-let pageEntry = getEntry(srcPath,'/miniprogram/**/index.js')
-let pluginEntry = getEntry(srcPath,'/plugins/**/index.js')
-let appEntry = getEntry(srcPath,'/miniprogram/app.js')
+let pageEntry = getEntry(srcPath,'/miniprogram/**/index.sqb')
+let pluginEntry = getEntry(srcPath,'/plugins/**/index.sqb')
+let appEntry = getEntry(srcPath,'/miniprogram/app.sqb')
 
-let entry = Object.assign({},pageEntry,appEntry)
+let entry = Object.assign({},pageEntry,pluginEntry,appEntry)
 module.exports = {
   entry,
   output:{
