@@ -1,0 +1,10 @@
+{
+  "miniprogramRoot": "miniprogram",
+  "pluginRoot": "plugin",
+  "compileType": "plugin",
+  "component2": true,
+  "axmlStrictCheck": false,
+  "enableParallelLoader": true,
+  "enableDistFileMinify": false,
+  "enableAppxNg":false
+}
