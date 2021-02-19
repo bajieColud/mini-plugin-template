@@ -22,7 +22,7 @@ module.exports = function(content) {
     mode:'dev'
   });
 
-  console.log('####parts is ',parts.script,parts.script.children);
+ // console.log('####parts is ',parts.script,parts.script.children);
 
   let output = '';
   let {path,name} = getFileInfo(resourcePath,context)

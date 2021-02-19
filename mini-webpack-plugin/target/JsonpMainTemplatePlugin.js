@@ -5,7 +5,7 @@
 "use strict";
 
 const { SyncWaterfallHook } = require("tapable");
-const Template = require("../Template");
+const Template = require("webpack/lib/Template");
 
 class JsonpMainTemplatePlugin {
 	apply(mainTemplate) {

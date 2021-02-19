@@ -6,8 +6,12 @@
     sqbPage
   } from '@/../mini-core/index'
 
+  import dayjs from 'dayjs';
+
   sqbPage({
-    
+    created(){
+      console.log('####today is ',dayjs().format('HH:mm'))
+    }
   })
 
 </script>

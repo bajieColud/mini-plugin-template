@@ -5,6 +5,8 @@ let path = require('path')
 let fileExt = require('./config')
 let ExtractTextPlugin = require('extract-text-webpack-plugin')
 let CopyWebpackPlugin = require('copy-webpack-plugin')
+let targetPlugin  = require('../mini-webpack-plugin/target/index')
+let windowChunkPlugin  = require('../mini-webpack-plugin/window/index')
 
 let optimization = require('./optimization')
 const platform = process.env.PLATFORM
@@ -34,7 +36,7 @@ module.exports = {
   },
   mode:'development',
   devtool:'inline-source-map',
-
+  target:targetPlugin,
   resolve:{
     extensions: ['.sqb','.js','.json'],
     alias:{
@@ -85,7 +87,9 @@ module.exports = {
           from: path.resolve(__dirname, `../config/plugin.json`),
           to:`${distPath}/plugins`
         }, 
-      ])
+      ]),
+    
+    new windowChunkPlugin()
   ]
 
 }

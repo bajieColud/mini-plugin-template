@@ -31,7 +31,7 @@ class JsonpChunkTemplatePlugin {
 				const globalObject = chunkTemplate.outputOptions.globalObject;
 				const source = new ConcatSource();
         const prefetchChunks = chunk.getChildIdsByOrders().prefetch;
-        source.add('let window = {};\n')
+        source.add(`var ${globalObject} = require("../window.js");\n`)
 				source.add(
 					`(${globalObject}[${JSON.stringify(
 						jsonpFunction
@@ -52,7 +52,7 @@ class JsonpChunkTemplatePlugin {
 				}
         source.add("])");
         source.add('\n');
-        source.add('module.exports = window')
+
 				return source;
 			}
 		);

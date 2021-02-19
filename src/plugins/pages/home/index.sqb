@@ -6,12 +6,17 @@
 
 
 <script>
-import { 
-  sqbComponent
-} from '@/../mini-core/index'
-sqbComponent({
-  data:{
+  import { 
+    sqbComponent
+  } from '@/../mini-core/index'
+  import dayjs from 'dayjs';
+  
+  sqbComponent({
+    data:{
 
-  }
-})
+    },
+    created(){
+       console.log('####today is ',dayjs().format('HH:mm'))
+    }
+  })
 </script>
