@@ -152,6 +152,7 @@ class JsonpMainTemplatePlugin {
     mainTemplate.hooks.render.tap(
 			"MainTemplate",
 			(renderSource, chunk, hash, moduleTemplate, dependencyTemplates) => {
+        console.log('######chunk modules is ',chunk.getModules())
       	const buf = mainTemplate.renderBootstrap(
                               hash,
                               chunk,
@@ -164,31 +165,56 @@ class JsonpMainTemplatePlugin {
                     "webpack/bootstrap"
                   );
 				let source = new ConcatSource();
-        const name = chunk.name; //输出文件名称
-        const path = mainTemplate.outputOptions.path; //输出路径
-        const relativePath = relative(`${path}/${name}/../`,`${path}`);
-        var globalObject = mainTemplate.outputOptions.globalObject;
-        source.add(`/*****/ var ${globalObject} = require("${relativePath}/window.js");\n`)
-				source.add("/******/ (function(modules) { // webpackBootstrap sqb\n");
-				source.add(new PrefixSource("/******/", bootstrapSource));
-				source.add("/******/ })\n");
-				source.add(
-					"/************************************************************************/\n"
-				);
+        // const name = chunk.name; //输出文件名称
+  
+        // var globalObject = mainTemplate.outputOptions.globalObject;
+        // // 获取依赖的文件
+        // const dependency = Array.from(chunk.groupsIterable)[0]
+        //       .chunks.filter(c => c !== chunk)
+        //       .map(c => c.id)
+
+        // let requirePre = ''
+        // dependency.forEach((d)=>{
+        //   const relativePath = relative(`${name}/../`,`${d}.js`);
+        //   requirePre+=`require("${relativePath}");\n`
+        // })
+        
+        // [chunk.entryModule].filter(Boolean).map(m =>
+        //   [m.id].concat(
+        //     Array.from(chunk.groupsIterable)[0]
+        //       .chunks.filter(c => c !== chunk)
+        //       .map(c => c.id)
+        //   )
+        // );
+        // source.add(`/*****/ ${requirePre}`)
+				// source.add("/******/ (function(modules) { // webpackBootstrap sqb\n");
+				// source.add(new PrefixSource("/******/", bootstrapSource));
+				// source.add("/******/ })\n");
+				// source.add(
+				// 	"/************************************************************************/\n"
+				// );
 				source.add("/******/ (");
+
 				source.add(
-					mainTemplate.hooks.modules.call(
-						new RawSource(""),
-						chunk,
-						hash,
-						moduleTemplate,
-						dependencyTemplates
-					)
+					Template.renderChunkModules(
+            chunk,
+            m => typeof m.source === "function",
+            moduleTemplate,
+            dependencyTemplates,
+            "/******/ "
+          )
 				);
 				source.add(")");
 				return source;
 			}
 		);
+
+    // mainTemplate.hooks.bootstrap.tap(
+    //   	"JsonpMainTemplatePlugin",
+    //   	(source, chunk, hash) => {
+        
+
+    // });
 
 		mainTemplate.hooks.bootstrap.tap(
 			"JsonpMainTemplatePlugin",

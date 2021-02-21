@@ -3,6 +3,5 @@
     "page-home": "pages/home/index"
   },
 
-  "publicPages": {},
-  "pages": []
+  "publicPages": {}
 }

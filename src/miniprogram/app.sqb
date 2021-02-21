@@ -3,8 +3,9 @@
 <script>
   import {
     sqbApp
-  } from '@/../mini-core/index'
+  } from '@/../../mini-core/index'
 
+  console.log('####it is 3')
   sqbApp({
     
   })

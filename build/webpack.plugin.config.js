@@ -11,8 +11,8 @@ let windowChunkPlugin  = require('../mini-webpack-plugin/window/index')
 let optimization = require('./optimization')
 const platform = process.env.PLATFORM
 
-const distPath = path.resolve(__dirname,`../dist/${platform}`)
-const srcPath = path.resolve(__dirname,'../src');
+const distPath = path.resolve(__dirname,`../dist/${platform}/plugin`)
+const srcPath = path.resolve(__dirname,'../src/plugin');
 
 function getEntry (rootSrc,rel) {
   var map = {};
@@ -24,11 +24,8 @@ function getEntry (rootSrc,rel) {
    return map;
 }
 
-let pageEntry = getEntry(srcPath,'/miniprogram/**/index.sqb')
-let pluginEntry = getEntry(srcPath,'/plugins/**/index.sqb')
-let appEntry = getEntry(srcPath,'/miniprogram/app.sqb')
-
-let entry = Object.assign({},pageEntry,pluginEntry,appEntry)
+let pluginEntry = getEntry(srcPath,'/**/index.sqb')
+let entry = Object.assign({},pluginEntry)
 module.exports = {
   entry,
   output:{
@@ -40,7 +37,7 @@ module.exports = {
   resolve:{
     extensions: ['.sqb','.js','.json'],
     alias:{
-      "@":path.resolve(__dirname,'../src')
+      "@":path.resolve(__dirname,'../src/plugin')
     }
   },
   optimization,
@@ -76,16 +73,8 @@ module.exports = {
 
     new CopyWebpackPlugin([
         {
-          from: path.resolve(__dirname, `../config/${fileExt.project}`),
-          to:distPath
-        }, 
-        {
-          from: path.resolve(__dirname, `../config/sitemap.json`),
-          to:`${distPath}/miniprogram`
-        }, 
-        {
           from: path.resolve(__dirname, `../config/plugin.json`),
-          to:`${distPath}/plugins`
+          to:`${distPath}`
         }, 
       ]),
     

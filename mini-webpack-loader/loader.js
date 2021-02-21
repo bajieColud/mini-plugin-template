@@ -26,6 +26,7 @@ module.exports = function(content) {
 
   let output = '';
   let {path,name} = getFileInfo(resourcePath,context)
+  console.log('######resourcePath context is ',resourcePath,context,path,name)
   async.waterfall([
     (callback) => {
      // 这里处理template

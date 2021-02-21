@@ -4,7 +4,7 @@
 <script>
   import {
     sqbPage
-  } from '@/../mini-core/index'
+  } from '@/../../mini-core/index'
 
   import dayjs from 'dayjs';
 
