@@ -18,6 +18,28 @@ module.exports = function(content) {
   this.cacheable(); //缓存该loader的输出
   const callback = this.async()
 
+
+  let loaderCtx = this;
+  function getRequireString (type, part, index, scoped) {
+    return loaderUtils.stringifyRequest(loaderCtx,
+      // disable all configuration loaders
+      '!!' +
+      // get loader string for pre-processors
+      getLoaderString(type, part, index, scoped) +
+      // select the corresponding part from the vue file
+      getSelectorString(type, index || 0) +
+      // the url to the actual vue file, including remaining requests
+      rawRequest
+    )
+  }
+
+  function getRequire (type, part, index, scoped) {
+    return 'require(' +
+      getRequireString(type, part, index, scoped) +
+    ')'
+  }
+
+
   let parts = parser(content,{
     filePath:resourcePath,
     mode:'dev'
