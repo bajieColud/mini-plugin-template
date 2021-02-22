@@ -1,5 +1,5 @@
 <template>
-  <view>123</view>
+ <page-home />
 </template>
 <script>
   import {

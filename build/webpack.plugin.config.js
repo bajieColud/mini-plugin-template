@@ -77,8 +77,6 @@ module.exports = {
           to:`${distPath}`
         }, 
       ]),
-    
-    new windowChunkPlugin()
   ]
 
 }

@@ -9,7 +9,7 @@ class windowChunkPlugin {
 
           let content = `let ${globalObject} = {};\n
           module.exports = ${globalObject}`
-          console.log('####content is ',content,`${distPath}/window.js`)
+         
           fs.writeFile(`${distPath}/window.js`,content,(err)=>{
             console.log('err');
           })

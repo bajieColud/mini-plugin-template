@@ -1,5 +1,6 @@
 const async = require('async')
 const fs = require('fs');
+const less = require('less-loader');
 const loaderUtils = require('loader-utils')
 var parser = require('./parser');
 let templateMl = require('./template')
@@ -22,7 +23,6 @@ module.exports = function(content) {
     mode:'dev'
   });
 
- // console.log('####parts is ',parts.script,parts.script.children);
 
   let output = '';
   let {path,name} = getFileInfo(resourcePath,context)
@@ -39,8 +39,21 @@ module.exports = function(content) {
       }
     },
     (callback) =>{
-      // 处理less文件
-      callback();
+      // **注入less inline-loader,让webpack进行编译
+      let lessPath = resourcePath.replace(/.*\/(.*)\.sqb/,function($0,$1){
+        return `${context}/${$1}.less`
+      })
+
+      fs.access('test', fs.F_OK, (err) => {
+        // 不存在
+        if(err) {
+           callback();
+            return;
+        }
+
+        // 
+        callback();
+      });
     },
     (callback) =>{
       // 处理json文件
@@ -64,9 +77,8 @@ module.exports = function(content) {
     },
     (callback) => {
       // 这里处理script内容
-      output = ''
       if (parts.script && parts.script.children.length) {
-        output = parts.script.children[0].text;
+        output += parts.script.children[0].text;
       }
       callback(null,output)
     },

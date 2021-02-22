@@ -1,7 +1,7 @@
 
 
 <template>
-  <view>12345678</view>
+  <view s:for='12345'>{{item}}</view>
 </template>
 
 
