@@ -44,11 +44,11 @@ module.exports = function(content) {
         return `${context}/${$1}.less`
       })
 
-      fs.access('test', fs.F_OK, (err) => {
+      fs.access(lessPath, fs.F_OK, (err) => {
         // 不存在
         if(err) {
            callback();
-            return;
+           return;
         }
 
         // 
