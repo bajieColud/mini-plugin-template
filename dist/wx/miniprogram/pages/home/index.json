@@ -4,6 +4,5 @@
   },
   "backgroundColor": "#EEE",
   "navigationBarTextStyle": "black",
-  "navigationBarBackgroundColor": "#fff",
-  "navigationStyle": "custom"
+  "navigationBarBackgroundColor": "#fff"
 }

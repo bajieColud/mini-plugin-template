@@ -27,14 +27,32 @@ class JsonpChunkTemplatePlugin {
 		chunkTemplate.hooks.render.tap(
 			"JsonpChunkTemplatePlugin",
 			(modules, chunk) => {
-        let name = chunk.name;
-        name = name.replace(/[\/@]/g,'_').replace(/[0-9.]/g,'').toUpperCase();
-        let source = new ConcatSource();
-        source.add(`var ${name} = `)
+      	const jsonpFunction = chunkTemplate.outputOptions.jsonpFunction;
+				const globalObject = chunkTemplate.outputOptions.globalObject;
+				const source = new ConcatSource();
+				const prefetchChunks = chunk.getChildIdsByOrders().prefetch;
+        source.add(`var ${globalObject} = {};\n`)
+				source.add(
+					`(${globalObject}[${JSON.stringify(
+						jsonpFunction
+					)}] = ${globalObject}[${JSON.stringify(
+						jsonpFunction
+					)}] || []).push([${JSON.stringify(chunk.ids)},`
+				);
 				source.add(modules);
-        source.add(';\n');
-        source.add(`export default ${name};`)
-			
+				const entries = getEntryInfo(chunk);
+				if (entries.length > 0) {
+					source.add(`,${JSON.stringify(entries)}`);
+				} else if (prefetchChunks && prefetchChunks.length) {
+					source.add(`,0`);
+				}
+
+				if (prefetchChunks && prefetchChunks.length) {
+					source.add(`,${JSON.stringify(prefetchChunks)}`);
+				}
+				source.add("])");
+        source.add('\n');
+        source.add(`module.exports = ${globalObject}`)
 				return source;
 			}
 		);

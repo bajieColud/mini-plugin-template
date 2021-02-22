@@ -27,7 +27,7 @@ function getEntry (rootSrc,rel) {
 let pageEntry = getEntry(srcPath,'/**/index.sqb')
 let appEntry = getEntry(srcPath,'/app.sqb')
 
-let entry = Object.assign({},pageEntry,appEntry)
+let entry = Object.assign({},appEntry,pageEntry)
 module.exports = {
   entry,
   output:{
@@ -39,7 +39,7 @@ module.exports = {
   resolve:{
     extensions: ['.sqb','.js','.json'],
     alias:{
-      "@":path.resolve(__dirname,'../src/miniprogram')
+      "@":path.resolve(__dirname,'../src')
     }
   },
   optimization,

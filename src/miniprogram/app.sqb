@@ -3,7 +3,10 @@
 <script>
   import {
     sqbApp
-  } from '@/../../mini-core/index'
+  } from '@/../mini-core/index'
+  import dayjs from 'dayjs';
+
+  import storage from '../common/storage.js'
 
   console.log('####it is 3')
   sqbApp({

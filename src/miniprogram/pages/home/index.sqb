@@ -4,13 +4,16 @@
 <script>
   import {
     sqbPage
-  } from '@/../../mini-core/index'
+  } from '@/../mini-core/index'
 
   import dayjs from 'dayjs';
 
+  import storage from '@/common/storage.js'
+
   sqbPage({
-    created(){
+    onLoad(){
       console.log('####today is ',dayjs().format('HH:mm'))
+      console.log('####staoge is ',storage())
     }
   })
 

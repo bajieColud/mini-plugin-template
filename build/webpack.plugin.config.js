@@ -37,7 +37,7 @@ module.exports = {
   resolve:{
     extensions: ['.sqb','.js','.json'],
     alias:{
-      "@":path.resolve(__dirname,'../src/plugin')
+      "@":path.resolve(__dirname,'../src')
     }
   },
   optimization,

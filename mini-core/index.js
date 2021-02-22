@@ -4,7 +4,7 @@ export function sqbPage(config){
 }
 
 export function sqbComponent(config) {
-  return sqbComponent(config)
+  return Component(config)
 }
 
 export function sqbApp(config) {
