@@ -3,6 +3,7 @@ let glob = require('glob')
 let relative = require('relative')
 let path = require('path')
 let fileExt = require('./config')
+let rules = require('./rule')
 let ExtractTextPlugin = require('extract-text-webpack-plugin')
 let CopyWebpackPlugin = require('copy-webpack-plugin')
 let targetPlugin  = require('../mini-webpack-plugin/target/index')
@@ -42,28 +43,7 @@ module.exports = {
   },
   optimization,
   module:{
-    rules:[
-      {
-        test:/\.sqb$/,
-        use:[
-        {
-          loader:path.resolve(__dirname,'../mini-webpack-loader/loader.js'),
-          options:{
-            fileExt
-          }
-        }]
-      },
-      {
-        test: /\.less$/,
-        use: ExtractTextPlugin.extract({
-            use: [{
-                loader: "css-loader"
-            }, {
-                loader: "less-loader"
-            }],
-        })
-     }
-    ]
+    rules:rules
   },
 
   plugins:[

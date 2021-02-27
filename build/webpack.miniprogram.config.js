@@ -9,6 +9,7 @@ let targetPlugin  = require('../mini-webpack-plugin/target/index')
 let windowChunkPlugin  = require('../mini-webpack-plugin/window/index')
 
 let optimization = require('./optimization')
+let rules = require('./rule')
 const platform = process.env.PLATFORM
 
 const distPath = path.resolve(__dirname,`../dist/${platform}/miniprogram`)
@@ -44,28 +45,7 @@ module.exports = {
   },
   optimization,
   module:{
-    rules:[
-      {
-        test:/\.sqb$/,
-        use:[
-        {
-          loader:path.resolve(__dirname,'../mini-webpack-loader/loader.js'),
-          options:{
-            fileExt
-          }
-        }]
-      },
-      {
-        test: /\.less$/,
-        use: ExtractTextPlugin.extract({
-            use: [{
-                loader: "css-loader"
-            }, {
-                loader: "less-loader"
-            }],
-        })
-     }
-    ]
+    rules:rules
   },
 
   plugins:[
