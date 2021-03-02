@@ -3,7 +3,7 @@
 
 const JsonpTemplatePlugin = require("./JsonpTemplatePlugin");
 
-// 下面plugin 没做任何修改，只是从webpack那边重新引用下
+// 下面plugin webpack那边拷贝，对chunk 和 main 的template进行了简单的修饰
 const NodeSourcePlugin = require("webpack/lib/node/NodeSourcePlugin");
 const FunctionModulePlugin = require("webpack/lib/FunctionModulePlugin");
 const LoaderTargetPlugin = require("webpack/lib/LoaderTargetPlugin");
