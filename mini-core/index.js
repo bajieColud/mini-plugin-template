@@ -4,11 +4,21 @@ import {
   fill,
   checkAsset,
   isObject,
-  
+  mapKeys
 } from './util'
 
 import VM from './vm'
 import handler from './handler'
+
+const pageMapLifetimes = {
+  'data':'data',
+  'created':'onLoad',
+  'show':'onShow',
+  'destroy':'onUnload',
+  'hide':'onHide',
+  'mounted':'onReady'
+}
+
 
 function proxyVm(config) {
   fill(config,'created',(original)=>{
@@ -24,8 +34,11 @@ function proxyVm(config) {
 
 export function sqbPage(config){
   checkAsset(isObject(config),'sqbComponent param need object !!')
+  let sqbConfig = {}
   proxyVm(config);
-  return Page(config)
+  mapKeys(config,sqbConfig,pageMapLifetimes)
+  console.log('###sqbConfig is ',sqbConfig)
+  return Page(sqbConfig)
 }
 
 export function sqbComponent(config = {}) {

@@ -4,7 +4,7 @@ import {
 } from './util'
 
 let handler = {
-  __getInitData() {
+  __getInitData(config) {
     let ret = {};
     let data = config.data || {}
     let keys = Object.keys(data);
