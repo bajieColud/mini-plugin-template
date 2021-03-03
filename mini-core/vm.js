@@ -1,5 +1,6 @@
 
 import deepClone from './deepClone'
+import { observe } from './observe';
 import {
   proxy
 } from './util'
@@ -25,8 +26,10 @@ export default class VM{
       let data = this.context.__vmHandler.__getInitData.call(this.context,this.options);
       this.data = deepClone(data);
       proxy(this.context,this.data,(key,value) => {
-        console.log('########key is ',key,value);
+        console.log('######proxy data is ',key,value)
         return true;
       })
+
+      observe(this.data); // 对data进行observer初始化
     }
 } 

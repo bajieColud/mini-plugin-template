@@ -5,10 +5,8 @@ import {
   remove,
   isObject,
   parsePath,
-  _Set as Set,
-  handleError,
   noop
-} from '../util/index'
+} from './util'
 
 import { traverse } from './traverse'
 import { queueWatcher } from './scheduler'
@@ -63,7 +61,7 @@ export default class Watcher {
       this.getter = parsePath(expOrFn)
       if (!this.getter) {
         this.getter = noop
-        process.env.NODE_ENV !== 'production' && warn(
+        warn(
           `Failed watching path: "${expOrFn}" ` +
           'Watcher only accepts simple dot-delimited paths. ' +
           'For full control, use a function instead.',
@@ -87,7 +85,7 @@ export default class Watcher {
       value = this.getter.call(vm, vm)
     } catch (e) {
       if (this.user) {
-        handleError(e, vm, `getter for watcher "${this.expression}"`)
+        console.error(e, vm, `getter for watcher "${this.expression}"`)
       } else {
         throw e
       }
@@ -175,7 +173,7 @@ export default class Watcher {
           try {
             this.cb.call(this.vm, value, oldValue)
           } catch (e) {
-            handleError(e, this.vm, `callback for watcher "${this.expression}"`)
+            console.error(e, this.vm, `callback for watcher "${this.expression}"`)
           }
         } else {
           this.cb.call(this.vm, value, oldValue)

@@ -93,3 +93,61 @@ export function remove (arr,item){
     }
   }
 }
+
+/**
+ * Define a property.
+ */
+export function def (obj, key, val, enumerable) {
+  Object.defineProperty(obj, key, {
+    value: val,
+    enumerable: !!enumerable,
+    writable: true,
+    configurable: true
+  })
+}
+
+export function warn(...args) {
+  console.warn(...args)
+}
+
+export function hasOwn (obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key)
+}
+
+export function hasProto() {
+
+}
+
+/**
+ * Check if value is primitive.
+ */
+export function isPrimitive (value) {
+  return (
+    typeof value === 'string' ||
+    typeof value === 'number' ||
+    // $flow-disable-line
+    typeof value === 'symbol' ||
+    typeof value === 'boolean'
+  )
+}
+
+
+/**
+ * Check if val is a valid array index.
+ */
+export function isValidArrayIndex (val){
+  const n = parseFloat(String(val))
+  return n >= 0 && Math.floor(n) === n && isFinite(val)
+}
+
+
+export function parsePath (path) {
+  const segments = path.split('.')
+  return function (obj) {
+    for (let i = 0; i < segments.length; i++) {
+      if (!obj) return
+      obj = obj[segments[i]]
+    }
+    return obj
+  }
+}
