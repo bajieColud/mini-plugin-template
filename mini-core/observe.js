@@ -1,27 +1,38 @@
+/* @flow */
+
 import Dep from './dep'
+import VNode from '../vdom/vnode'
 import { arrayMethods } from './array'
-
-import { def, isPlainObject, isObject, hasProto, hasOwn, isValidArrayIndex } from '../helper/utils'
-
-import { warn } from '../helper/log'
+import {
+  def,
+  warn,
+  hasOwn,
+  hasProto,
+  isObject,
+  isPlainObject,
+  isPrimitive,
+  isUndef,
+  isValidArrayIndex,
+  isServerRendering
+} from './util'
 
 const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 
 /**
- * By default, when a reactive property is set, the new value is
- * also converted to become reactive. However when passing down props,
- * we don't want to force conversion because the value may be a nested value
- * under a frozen data structure. Converting it would defeat the optimization.
+ * In some cases we may want to disable observation inside a component's
+ * update computation.
  */
-export const observerState = {
-  shouldConvert: true
+export let shouldObserve = true
+
+export function toggleObserving (value) {
+  shouldObserve = value
 }
 
 /**
- * Observer class that are attached to each observed
- * object. Once attached, the observer converts target
+ * Observer class that is attached to each observed
+ * object. Once attached, the observer converts the target
  * object's property keys into getter/setters that
- * collect dependencies and dispatches updates.
+ * collect dependencies and dispatch updates.
  */
 export class Observer {
   constructor (value) {
@@ -30,10 +41,11 @@ export class Observer {
     this.vmCount = 0
     def(value, '__ob__', this)
     if (Array.isArray(value)) {
-      const augment = hasProto
-        ? protoAugment
-        : copyAugment
-      augment(value, arrayMethods, arrayKeys)
+      if (hasProto) {
+        protoAugment(value, arrayMethods)
+      } else {
+        copyAugment(value, arrayMethods, arrayKeys)
+      }
       this.observeArray(value)
     } else {
       this.walk(value)
@@ -41,21 +53,21 @@ export class Observer {
   }
 
   /**
-   * Walk through each property and convert them into
+   * Walk through all properties and convert them into
    * getter/setters. This method should only be called when
    * value type is Object.
    */
   walk (obj) {
     const keys = Object.keys(obj)
     for (let i = 0; i < keys.length; i++) {
-      defineReactive(obj, keys[i], obj[keys[i]])
+      defineReactive(obj, keys[i])
     }
   }
 
   /**
    * Observe a list of Array items.
    */
-  observeArray (items) {
+  observeArray (items: Array<any>) {
     for (let i = 0, l = items.length; i < l; i++) {
       observe(items[i])
     }
@@ -65,22 +77,21 @@ export class Observer {
 // helpers
 
 /**
- * Augment an target Object or Array by intercepting
+ * Augment a target Object or Array by intercepting
  * the prototype chain using __proto__
  */
-function protoAugment (target, src, keys) {
+function protoAugment (target, src: Object) {
   /* eslint-disable no-proto */
   target.__proto__ = src
   /* eslint-enable no-proto */
 }
 
 /**
- * Augment an target Object or Array by defining
+ * Augment a target Object or Array by defining
  * hidden properties.
  */
-
 /* istanbul ignore next */
-function copyAugment (target, src, keys) {
+function copyAugment (target: Object, src: Object, keys: Array<string>) {
   for (let i = 0, l = keys.length; i < l; i++) {
     const key = keys[i]
     def(target, key, src[key])
@@ -99,11 +110,7 @@ export function observe (value, asRootData) {
   let ob
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
-  } else if (
-    observerState.shouldConvert &&
-    (Array.isArray(value) || isPlainObject(value)) &&
-    Object.isExtensible(value)
-  ) {
+  } else  {
     ob = new Observer(value)
   }
   if (asRootData && ob) {
@@ -132,6 +139,9 @@ export function defineReactive (
   // cater for pre-defined getter/setters
   const getter = property && property.get
   const setter = property && property.set
+  if ((!getter || setter) && arguments.length === 2) {
+    val = obj[key]
+  }
 
   let childOb = !shallow && observe(val)
   Object.defineProperty(obj, key, {
@@ -157,7 +167,11 @@ export function defineReactive (
         return
       }
       /* eslint-enable no-self-compare */
-      customSetter && customSetter()
+      if (process.env.NODE_ENV !== 'production' && customSetter) {
+        customSetter()
+      }
+      // #7981: for accessor properties without setter
+      if (getter && !setter) return
       if (setter) {
         setter.call(obj, newVal)
       } else {
@@ -174,19 +188,27 @@ export function defineReactive (
  * triggers change notification if the property doesn't
  * already exist.
  */
-export function set (target, key, val) {
+export function set (target: Array<any> | Object, key: any, val: any): any {
+  if (process.env.NODE_ENV !== 'production' &&
+    (isUndef(target) || isPrimitive(target))
+  ) {
+    warn(`Cannot set reactive property on undefined, null, or primitive value: ${(target: any)}`)
+  }
   if (Array.isArray(target) && isValidArrayIndex(key)) {
     target.length = Math.max(target.length, key)
     target.splice(key, 1, val)
     return val
   }
-  if (hasOwn(target, key)) {
+  if (key in target && !(key in Object.prototype)) {
     target[key] = val
     return val
   }
-  const ob = target.__ob__
-  if (ob && ob.vmCount) {
-    warn('Avoid adding reactive properties to the root data at runtime, declare it upfront in the data option!')
+  const ob = (target: any).__ob__
+  if (target._isVue || (ob && ob.vmCount)) {
+    process.env.NODE_ENV !== 'production' && warn(
+      'Avoid adding reactive properties to a Vue instance or its root $data ' +
+      'at runtime - declare it upfront in the data option.'
+    )
     return val
   }
   if (!ob) {
@@ -201,14 +223,22 @@ export function set (target, key, val) {
 /**
  * Delete a property and trigger change if necessary.
  */
-export function del (target, key) {
+export function del (target: Array<any> | Object, key: any) {
+  if (process.env.NODE_ENV !== 'production' &&
+    (isUndef(target) || isPrimitive(target))
+  ) {
+    warn(`Cannot delete reactive property on undefined, null, or primitive value: ${(target: any)}`)
+  }
   if (Array.isArray(target) && isValidArrayIndex(key)) {
     target.splice(key, 1)
     return
   }
-  const ob = target.__ob__
-  if (ob && ob.vmCount) {
-    warn('Avoid deleting properties on the root data, just set it to null!')
+  const ob = (target: any).__ob__
+  if (target._isVue || (ob && ob.vmCount)) {
+    process.env.NODE_ENV !== 'production' && warn(
+      'Avoid deleting properties on a Vue instance or its root $data ' +
+      '- just set it to null.'
+    )
     return
   }
   if (!hasOwn(target, key)) {
@@ -225,7 +255,7 @@ export function del (target, key) {
  * Collect dependencies on array elements when the array is touched, since
  * we cannot intercept array element access like property getters.
  */
-function dependArray (value) {
+function dependArray (value: Array<any>) {
   for (let e, i = 0, l = value.length; i < l; i++) {
     e = value[i]
     e && e.__ob__ && e.__ob__.dep.depend()

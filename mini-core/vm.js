@@ -8,16 +8,17 @@ export default class VM{
     constructor(context,options) {
       this.context = context; //component,page,app
       this.options = options;
-      this.initied = false; 
+      this.hasInit = false; 
+      this.watchers = []; // 多少监听者
     }
 
 
     // vm所有的重要信息全在这里进行初始化
     created(){
-     if (this.initied) return;
+     if (this.hasInit) return;
      this.initData();
 
-     this.initied = true;
+     this.hasInit = true;
     }
 
     initData(){
