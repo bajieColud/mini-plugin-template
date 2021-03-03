@@ -1,6 +1,6 @@
 /* @flow */
 
-import {isObject } from '../util/index'
+import {isObject } from './util'
 
 const seenObjects = new Set()
 

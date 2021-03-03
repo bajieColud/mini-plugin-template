@@ -164,7 +164,7 @@ export function defineReactive (
         return
       }
       /* eslint-enable no-self-compare */
-      if (process.env.NODE_ENV !== 'production' && customSetter) {
+      if (customSetter) {
         customSetter()
       }
       // #7981: for accessor properties without setter
@@ -186,10 +186,9 @@ export function defineReactive (
  * already exist.
  */
 export function set (target, key, val) {
-  if (process.env.NODE_ENV !== 'production' &&
-    (isNil(target) || isPrimitive(target))
-  ) {
+  if (isNil(target) || isPrimitive(target)) {
     warn(`Cannot set reactive property on undefined, null, or primitive value: ${(target)}`)
+    return;
   }
   if (Array.isArray(target) && isValidArrayIndex(key)) {
     target.length = Math.max(target.length, key)

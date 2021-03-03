@@ -10,7 +10,7 @@ import {
 
 import { traverse } from './traverse'
 import { queueWatcher } from './scheduler'
-import Dep, { pushTarget, popTarget } from './dep'
+import { pushTarget, popTarget } from './dep'
 
 
 let uid = 0
