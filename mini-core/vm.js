@@ -2,7 +2,9 @@
 import deepClone from './deepClone'
 import { observe } from './observe';
 import {
-  proxy
+  proxy,
+  noop,
+  diffrence
 } from './util'
 import Watcher from './watcher';
 
@@ -11,8 +13,8 @@ export default class VM{
       this.context = context; //component,page,app
       this.options = options;
       this.hasInit = false; 
-      this.__renderWacther = null;
-      this.watchers = []; // watcher list for 
+      this.__renderWatcher = null;
+      this._watchers = []; // watcher list for 
     }
 
 
@@ -20,6 +22,7 @@ export default class VM{
     created(){
       if (this.hasInit) return;
       this.initData();
+      this.initRender(); // 创建render watcher 
       this.hasInit = true;
     }
 
@@ -35,9 +38,16 @@ export default class VM{
 
     // init watcher ,add in ob.dep. when data change , notify here
     initRender(){
-      this.__renderWacther = new Watcher(this,()=>{
-        
-      },{},true)
+      this.__renderWatcher = new Watcher(this,() => {
+        this.render();
+      },noop)
+    }
+
+    render(){
+      const renderData = this.data; // vm中的data
+      const appData = this.context.data; // 小程序里的data
+      // 进行严格比较，提取差异点，进行渲染
+      const diff = diffrence(appData,renderData)
     }
 
 

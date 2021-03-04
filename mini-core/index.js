@@ -37,7 +37,6 @@ export function sqbPage(config){
   let sqbConfig = {}
   proxyVm(config);
   mapKeys(config,sqbConfig,pageMapLifetimes)
-  console.log('###sqbConfig is ',sqbConfig)
   return Page(sqbConfig)
 }
 

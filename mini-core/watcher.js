@@ -51,9 +51,9 @@ export default class Watcher {
     this.newDeps = []
     this.depIds = new Set()
     this.newDepIds = new Set()
-    this.expression = process.env.NODE_ENV !== 'production'
-      ? expOrFn.toString()
-      : ''
+    // this.expression = process.env.NODE_ENV !== 'production'
+    //   ? expOrFn.toString()
+    //   : ''
     // parse expression for getter
     if (typeof expOrFn === 'function') {
       this.getter = expOrFn
@@ -78,11 +78,13 @@ export default class Watcher {
    * Evaluate the getter, and re-collect dependencies.
    */
   get () {
+    console.log('########wacther get is ',this)
     pushTarget(this)
     let value
     const vm = this.vm
     try {
       value = this.getter.call(vm, vm)
+      console.log('#####value is ',value)
     } catch (e) {
       if (this.user) {
         console.error(e, vm, `getter for watcher "${this.expression}"`)
@@ -92,7 +94,7 @@ export default class Watcher {
     } finally {
       // "touch" every property so they are all tracked as
       // dependencies for deep watching
-      if (this.deep) {
+      if (this.deep && value) {
         traverse(value)
       }
       popTarget()
@@ -141,6 +143,7 @@ export default class Watcher {
    * Will be called when a dependency changes.
    */
   update () {
+    console.log('#####watcher update is ',this.lazy,this.sync)
     /* istanbul ignore else */
     if (this.lazy) {
       this.dirty = true
@@ -157,6 +160,7 @@ export default class Watcher {
    */
   run () {
     if (this.active) {
+      // 重新收集依赖
       const value = this.get()
       if (
         value !== this.value ||

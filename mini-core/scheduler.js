@@ -1,15 +1,12 @@
 /* @flow */
 
-import config from '../config'
-import { callHook, activateChildComponent } from '../instance/lifecycle'
+import config from './config'
 
 import {
   warn,
-  nextTick,
-  devtools,
-  inBrowser,
-  isIE
-} from '../util/index'
+} from './util'
+
+import nextTick  from './next-tick.js';
 
 export const MAX_UPDATE_COUNT = 100
 
@@ -96,12 +93,6 @@ function flushSchedulerQueue () {
   // call component updated and activated hooks
   callActivatedHooks(activatedQueue)
   callUpdatedHooks(updatedQueue)
-
-  // devtool hook
-  /* istanbul ignore if */
-  if (devtools && config.devtools) {
-    devtools.emit('flush')
-  }
 }
 
 function callUpdatedHooks (queue) {
@@ -109,9 +100,9 @@ function callUpdatedHooks (queue) {
   while (i--) {
     const watcher = queue[i]
     const vm = watcher.vm
-    if (vm._watcher === watcher && vm._isMounted && !vm._isDestroyed) {
-      callHook(vm, 'updated')
-    }
+    // if (vm._watcher === watcher && vm._isMounted && !vm._isDestroyed) {
+    //   callHook(vm, 'updated')
+    // }
   }
 }
 
@@ -129,7 +120,7 @@ export function queueActivatedComponent () {
 function callActivatedHooks (queue) {
   for (let i = 0; i < queue.length; i++) {
     queue[i]._inactive = true
-    activateChildComponent(queue[i], true /* true */)
+   // activateChildComponent(queue[i], true /* true */)
   }
 }
 

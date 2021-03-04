@@ -55,9 +55,19 @@ export class Observer {
    * value type is Object.
    */
   walk (obj) {
+   /**
+    * {
+    *   motto:'hello world',
+    * userInfo:{
+    *   name:'bajie'
+    * },
+    * hasUserInfo
+    * }
+    * 
+    */
     const keys = Object.keys(obj)
     for (let i = 0; i < keys.length; i++) {
-      defineReactive(obj, keys[i])
+      defineReactive(obj, keys[i]) // key:motto/userInfo/hasUserInfo
     }
   }
 
@@ -127,7 +137,6 @@ export function defineReactive (
   shallow
 ) {
   const dep = new Dep()
-
   const property = Object.getOwnPropertyDescriptor(obj, key)
   if (property && property.configurable === false) {
     return
@@ -158,7 +167,9 @@ export function defineReactive (
       return value
     },
     set: function reactiveSetter (newVal) {
+     
       const value = getter ? getter.call(obj) : val
+     
       /* eslint-disable no-self-compare */
       if (newVal === value || (newVal !== newVal && value !== value)) {
         return

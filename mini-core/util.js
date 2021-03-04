@@ -41,6 +41,10 @@ export function isFunction(value) {
   return proto.call(value) === FUNCTION_TAG
 }
 
+export function getTag(value) {
+  return proto.call(value);
+}
+
 
 export function  checkAsset(value,message) {
   if (!value) throw new Error(message || 'check asset');
@@ -77,7 +81,6 @@ export function proxy(
         set:function(value) {
           if (check && check(key,value)) {
             target[key] = value;
-            console.log('#######target data is ',key,target[key])
           }
         }
       })
@@ -150,4 +153,27 @@ export function parsePath (path) {
     }
     return obj
   }
+}
+
+
+export const noop = () => {}
+
+export function getPath(){
+
+}
+
+// 数据间的差异性
+export function diffrence(source,target,diff = {}) {
+    let baseKeys = Object.keys(source);
+    let targetKeys = Object.keys(target);
+
+    // source 是小程序的data
+    // target是VM的data
+    targetKeys.forEach((tk)=>{
+        let sourceData = source[tk];
+        let targetData = target[tk];
+        if (getTag(sourceData) !== getTag(targetData)) {
+          diff[`${tk}`] = targetData
+        }
+    })
 }
