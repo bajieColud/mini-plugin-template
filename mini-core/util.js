@@ -8,7 +8,8 @@ export const MAP_TAG = '[object Map]';
 export const SET_TAG = '[object Set]';
 export const SYMBOL_TAG = '[object Symbol]';
 export const FUNCTION_TAG = '[object Function]';
-export const DATE_TAG = '[object Date]'
+export const DATE_TAG = '[object Date]';
+export const REGEXP_TAG = '"[object RegExp]"'
 
 export function fill(source, name, replacement) {
   const original = source[name];
