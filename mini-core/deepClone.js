@@ -21,8 +21,7 @@ export default function deepClone(value,stack) {
   if (tag === DATE_TAG) {
       result = new Date(value)
   }else if (tag === REGEXP_TAG) {
-    const reFlags = /\w*$/
-    result = new regexp.constructor(value.source, reFlags.exec(value))
+    result = new regexp.constructor(value.source, value.flags)
     result.lastIndex = regexp.lastIndex
   }else if (typeof value.constructor === 'object'){
     result = new value.constructor();
