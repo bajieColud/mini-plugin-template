@@ -78,13 +78,11 @@ export default class Watcher {
    * Evaluate the getter, and re-collect dependencies.
    */
   get () {
-    console.log('########wacther get is ',this)
     pushTarget(this)
     let value
     const vm = this.vm
     try {
       value = this.getter.call(vm, vm)
-      console.log('#####value is ',value)
     } catch (e) {
       if (this.user) {
         console.error(e, vm, `getter for watcher "${this.expression}"`)
@@ -143,7 +141,6 @@ export default class Watcher {
    * Will be called when a dependency changes.
    */
   update () {
-    console.log('#####watcher update is ',this.lazy,this.sync)
     /* istanbul ignore else */
     if (this.lazy) {
       this.dirty = true

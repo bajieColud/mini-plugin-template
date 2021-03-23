@@ -162,19 +162,3 @@ export const noop = () => {}
 export function getPath(){
 
 }
-
-// 数据间的差异性
-export function diffrence(source,target,diff = {}) {
-    let baseKeys = Object.keys(source);
-    let targetKeys = Object.keys(target);
-
-    // source 是小程序的data
-    // target是VM的data
-    targetKeys.forEach((tk)=>{
-        let sourceData = source[tk];
-        let targetData = target[tk];
-        if (getTag(sourceData) !== getTag(targetData)) {
-          diff[`${tk}`] = targetData
-        }
-    })
-}

@@ -55,7 +55,7 @@ if (typeof Promise !== 'undefined') {
   }
 }
 
-export function nextTick (cb, ctx) {
+export default function nextTick (cb, ctx) {
   let _resolve
   callbacks.push(() => {
     if (cb) {

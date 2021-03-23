@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "page-home": "plugin://emenu-plugin/page-home"
-  },
-  "backgroundColor": "#EEE",
-  "navigationBarTextStyle": "black",
-  "navigationBarBackgroundColor": "#fff"
-}
