@@ -9,7 +9,13 @@ export const SET_TAG = '[object Set]';
 export const SYMBOL_TAG = '[object Symbol]';
 export const FUNCTION_TAG = '[object Function]';
 export const DATE_TAG = '[object Date]';
-export const REGEXP_TAG = '"[object RegExp]"'
+export const REGEXP_TAG = '[object RegExp]';
+export const NULL_TAG = '[object Null]';
+export const STRING_TAG = '[object String]';
+export const NUMBER_TAG = '[object Number]';
+export const BOOLEAN_TAG = '[object Boolean]';
+
+
 
 export function fill(source, name, replacement) {
   const original = source[name];

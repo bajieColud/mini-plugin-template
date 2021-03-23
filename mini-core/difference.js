@@ -1,21 +1,16 @@
-import { mixin } from "lodash";
-
-
-const proto = Object.prototype.toString;
-
-const OBJECT_TAG = '[object Object]';
-const ARRAY_TAG = '[object Array]';
-const MAP_TAG = '[object Map]';
-const SET_TAG = '[object Set]';
-const SYMBOL_TAG = '[object Symbol]';
-const FUNCTION_TAG = '[object Function]';
-const DATE_TAG = '[object Date]';
-const REGEXP_TAG = '[object RegExp]'
-
-const Number_TAG = '[object Number]'
-const String_TAG = '[object String]'
-const Boolean_TAG = '[object Boolean]'
-const NULL_TAG = '[object Null]'
+import {
+  ARRAY_TAG,
+  OBJECT_TAG,
+  MAP_TAG,
+  SET_TAG,
+  DATE_TAG,
+  proto,
+  REGEXP_TAG,
+  NULL_TAG,
+  STRING_TAG,
+  BOOLEAN_TAG,
+  NUMBER_TAG
+} from './util'
 
 // 找出数据间的差异性
 // 使用动态规划方法，将大业务拆分成小业务，再进行合并
@@ -39,10 +34,9 @@ const NULL_TAG = '[object Null]'
 function objectDifference(source,target,path,currentKey) {
   let sKeys = Object.keys(source);
   let tKeys = Object.keys(target);
+  let keys = new Set(sKeys.concat(tKeys));
 
-  let key;
-  while(sKeys.length || tKeys.length) {
-    key = sKeys.length ? sKeys.shift() : tKeys.shift()
+  for(let key of keys) {
     difference(source[key],target[key],path,currentKey?`${currentKey}[${key}]`:key)
   }
  
@@ -52,30 +46,25 @@ function arrayDifference(source,target,path,currentKey) {
   let sLen = source.length;
   let tLen = target.length;
   for (let i = 0; i < sLen || i < tLen ; i++) {
-    difference(source[i],target[i],path,currentKey?`${currentKey}[${key}]`:key)
+    difference(source[i],target[i],path,`${currentKey}[${i}]`)
   }
 
 }
 
-function mapDifference(source,target,path,currentKey) {
 
-
-
-}
-
-export default function difference(source,target,path,currentKey) {
+export default function difference(source,target,path = {},currentKey) {
     let sTag = proto.call(source);
     let tTag = proto.call(target);
 
     path = path || [];
     currentKey = currentKey || ''
     if (sTag !== tTag) {
-      return path.push([currentKey,target])
+      return path[currentKey] = target;
     } 
 
-    if (sTag === Number_TAG || sTag === String_TAG || sTag === Boolean_TAG || sTag === NULL_TAG) {
+    if (sTag === NUMBER_TAG || sTag === STRING_TAG || sTag === BOOLEAN_TAG || sTag === NULL_TAG) {
       if (source !== target) {
-        return path.push([currentKey,target])
+        return path[currentKey] = target;
       }
     }
 
@@ -87,7 +76,11 @@ export default function difference(source,target,path,currentKey) {
       return objectDifference(source,target,path,currentKey)
     }
 
-    if (sTag === MAP_TAG) {
+
+    //小程序的setdata无法对map 和set进行深入的设置，比如list[0]['name']='bajie',
+    // 所以这里比较是否里面的内容深度相等，不等则进行引用赋值
+
+    if (sTag === MAP_TAG || sTag === SET_TAG) { 
       return 
     }
 
